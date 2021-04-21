@@ -1,0 +1,55 @@
+#include <SPI.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_PCD8544.h>
+#include <Wire.h>
+#include "SparkFunBME280.h"
+
+Adafruit_PCD8544 display = Adafruit_PCD8544(18,23,19,5,14);
+
+BME280 mySensor; //Uses I2C address 0x76 (jumper closed)
+  // const int ledPin1 = 27;                 // пин подсветки дисплея
+
+const int freq = 5000;
+const int ledChannel = 0;
+const int resolution = 8;
+
+void setup() {
+    Serial.begin(9600);
+  // ledcAttachPin(ledPin1, ledChannel);  // инициализация на подсветку моего дисплейчика
+  display.begin();
+  // init done
+
+  // you can change the contrast around to adapt the display
+  // for the best viewing!
+  display.setContrast(60);
+  display.display(); // show splashscreen
+  delay(2000);
+  display.clearDisplay();   // clears the screen and buffer
+  Wire.begin();
+  mySensor.setI2CAddress(0x76); //Connect to a second sensor
+  mySensor.beginI2C();
+}
+
+void loop() {
+  // ledcWrite(ledChannel, 10);          // если включаю шим подсветки, ESPшка уходит в циклическую перезагрузку
+  display.setTextSize(1);
+  display.setTextColor(BLACK);
+  display.setCursor(0,0);
+  display.print("Pres:");
+  display.println(mySensor.readFloatPressure() / 100.0F * 0.75F, 2);
+
+  display.print("Temp: ");
+  display.println(mySensor.readTempC(), 2);
+
+  // Примеры использования дисплея
+  // display.setTextColor(WHITE, BLACK); // 'inverted' text
+  // display.println(3.141592);
+  // display.setTextSize(1);
+  // display.setTextColor(BLACK);
+  // display.print("0x"); display.println(0xDEADBEEF, HEX);
+  // display.setCursor(3,24);
+  // display.println(0xDEADBEEF, HEX);
+  display.display();
+  delay(200);
+  display.clearDisplay();
+}
