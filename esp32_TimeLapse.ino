@@ -1,3 +1,4 @@
+// Требуется проверка данного кода.
 #include "esp_camera.h"
 #include "esp_timer.h"
 #include "img_converters.h"
