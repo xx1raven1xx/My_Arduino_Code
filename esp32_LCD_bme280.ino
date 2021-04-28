@@ -96,14 +96,8 @@ if (mx < pressure_array[a])
     DEBUG("----------------");
     DEBUG(mn);
     DEBUG(mx);
-/*
-for (byte a = 0; a < 83; a++){
-  Serial.print(pressure_array[i]);Serial.print(' ');
-}
- Serial.println('----------------------');
-*/
+
     display.display();
-    //delay(200);
     upd = false;
  }
  if (millis() - tmr > 200){
@@ -138,7 +132,6 @@ if (Serial.available() > 0) {                 // если есть что то �
       int intIndx = strData.substring(2).toInt();
       Serial.println(pressure_array[intIndx]);
     }
-    //Serial.print(intIndx);Serial.print(" ");Serial.println(intValue);
     if (strData.startsWith("hg"))
       Serial.println(float(intVal)*133.322F);
     if (strData.startsWith("mm"))
