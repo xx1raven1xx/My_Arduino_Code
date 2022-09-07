@@ -6,11 +6,11 @@
 // Data wire is plugged into port 2 on the Arduino
 #define ONE_WIRE_BUS 15
 #define TEMPERATURE_PRECISION 12 // Lower resolution
-#define debug true // вывод отладочных сообщений
+#define debug false // вывод отладочных сообщений
 #define postingInterval  330000 // интервал между отправками данных в секундах (330 сек=5,5 минут)
 
-#define ssid  "Guest"
-#define password  ""
+#define ssid  "Alex 2.4"
+#define password  "123456789"
 #define DHCP true
 
 IPAddress local_IP(192, 168, 0, 61);
@@ -51,7 +51,6 @@ void setup(void)
  */
 void loop(void)
 { 
-  SendToNarodmon();
   // call sensors.requestTemperatures() to issue a global temperature 
   // request to all devices on the bus
   //Serial.print("Requesting temperatures...");
@@ -71,6 +70,7 @@ void loop(void)
   {
     Serial.println("Error: Could not read temperature data");
   }
+  SendToNarodmon();
   delay(postingInterval);
 }
 
@@ -97,7 +97,6 @@ void wificonect() { // процедура подключения к Wifi.
 
 
 bool SendToNarodmon() { // Собственно формирование пакета и отправка.
-  //bmx280.measure();
   //DeviceAddress tempDeviceAddress;
 
   wificonect();// подключаемся к сети
@@ -122,24 +121,22 @@ bool SendToNarodmon() { // Собственно формирование пак�
   //DS18B20 в самом конце чтоб было время на измерения
 //    sensors.getAddress(tempDeviceAddress, i);
  
-    buf = buf + "#" + String(sensors.getTempCByIndex(0)) + "#DS18B20" + "\n"; //и температура
+    buf = buf + "#T1#" + String(sensors.getTempCByIndex(0)) + "#DS18B20" + "\n"; //и температура
 
 
   String worcktime = String(millis());
   float WTime = worcktime.toInt(); WTime /= 1000;
-  buf = buf + "#WORKTIME#"  + String(WTime) + "#Время передачи данных" + "\n"; // уровень WIFI сигнала
+  buf = buf + "#WORKTIME#"  + String(WTime) + "\n"; // уровень WIFI сигнала
   buf = buf + "##\n"; //окончание передачи
 
   client.print(buf); // и отправляем данные
   Serial.print(buf);
 
 
-  delay(10);// сделать 100 если нужен ответ или 10 если не нужен . Время активности увеличивается в 2 раза
+  delay(100);// сделать 100 если нужен ответ или 10 если не нужен . Время активности увеличивается в 2 раза
   while (client.available()) {
     String line = client.readStringUntil('\r'); // если что-то в ответ будет - все в Serial
-    if (debug) {
-      Serial.println(line);
-    }
+    Serial.println(line);
   }
   return true; //ушло
 }
