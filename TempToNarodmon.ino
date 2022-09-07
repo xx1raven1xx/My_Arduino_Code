@@ -138,5 +138,6 @@ bool SendToNarodmon() { // Собственно формирование пак�
     String line = client.readStringUntil('\r'); // если что-то в ответ будет - все в Serial
     Serial.println(line);
   }
+  client.stop();
   return true; //ушло
 }
