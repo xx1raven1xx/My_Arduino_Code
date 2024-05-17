@@ -7,10 +7,12 @@
 // Data wire is plugged into port 2 on the Arduino
 #define ONE_WIRE_BUS 15
 #define TEMPERATURE_PRECISION 12 // Lower resolution
-#define debug false // вывод отладочных сообщений
+#define debug true // вывод отладочных сообщений
 #define postingInterval  330000 // интервал между отправками данных в секундах (330 сек=5,5 минут)
 
-#define ssid  "Alex 2.4"
+// #define ssid  "Alex 2.4"
+// #define password  "123456789"
+#define ssid  "Pro8"
 #define password  "123456789"
 #define DHCP true
 
@@ -120,7 +122,7 @@ bool SendToNarodmon() { // Собственно формирование пак�
   if (debug) Serial.print(buf);
 
   //DS18B20 в самом конце чтоб было время на измерения
-//    sensors.getAddress(tempDeviceAddress, i);
+  //    sensors.getAddress(tempDeviceAddress, i);
  
     buf = buf + "#T1#" + String(sensors.getTempCByIndex(0)) + "#DS18B20" + "\n"; //и температура
 
@@ -131,7 +133,9 @@ bool SendToNarodmon() { // Собственно формирование пак�
   buf = buf + "##\n"; //окончание передачи
 
   client.print(buf); // и отправляем данные
-  Serial.print(buf);
+  Serial.println("---------------Данные буфера!--------------");
+  Serial.println(buf);
+  Serial.println("---------------Данные буфера!--------------");
 
 
   delay(100);// сделать 100 если нужен ответ или 10 если не нужен . Время активности увеличивается в 2 раза
