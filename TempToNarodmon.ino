@@ -144,5 +144,6 @@ bool SendToNarodmon() { // Собственно формирование пак�
     Serial.println(line);
   }
   client.stop();
+  WiFi.disconnect();
   return true; //ушло
 }
